@@ -17,13 +17,13 @@
  * limitations under the License.
  */
 
+import neo4j from 'neo4j-driver';
 import { Node } from "../classes";
-import createWhereAndParams from "./create-where-and-params";
-import createProjectionAndParams from "./create-projection-and-params";
-import { GraphQLWhereArg, GraphQLOptionsArg, GraphQLSortArg, Context } from "../types";
-import createAuthAndParams from "./create-auth-and-params";
 import { AUTH_FORBIDDEN_ERROR } from "../constants";
-import neo4j from 'neo4j-driver'
+import { Context, GraphQLOptionsArg, GraphQLSortArg, GraphQLWhereArg } from "../types";
+import createAuthAndParams from "./create-auth-and-params";
+import createProjectionAndParams from "./create-projection-and-params";
+import createWhereAndParams from "./create-where-and-params";
 
 function translateRead({ node, context }: { context: Context; node: Node }): [string, any] {
     const { resolveTree } = context;
@@ -106,12 +106,12 @@ function translateRead({ node, context }: { context: Context; node: Node }): [st
 
         if (hasSkip) {
             skipStr = `SKIP $${varName}_skip`;
-            cypherParams[`${varName}_skip`] = neo4j.int(optionsInput.skip);
+            cypherParams[`${varName}_skip`] = neo4j.int(optionsInput.skip!);
         }
 
         if (hasLimit) {
             limitStr = `LIMIT $${varName}_limit`;
-            cypherParams[`${varName}_limit`] = neo4j.int(optionsInput.limit);
+            cypherParams[`${varName}_limit`] = neo4j.int(optionsInput.limit!);
         }
 
         if (optionsInput.sort && optionsInput.sort.length) {
